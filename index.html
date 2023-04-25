@@ -15,6 +15,10 @@
         />
         <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
         <style>
+            /* body{
+                background-color: #333;
+                color: white;
+            } */
             main {
                 display: flex;
                 flex-direction: column;
@@ -51,6 +55,8 @@
 
                 <input type="text" name="" id="id" placeholder="id" />
                 
+                <button type="button" onclick="darkMode()">다크모드</button>
+
                 <div id="editor"></div>
 
                 <button type='button' class='memo-btn' onclick="saveNote()">메모</button>
@@ -72,12 +78,21 @@
                 height: "600px",
                 initialEditType: "markdown",
                 previewStyle: "vertical",
-                // theme: 'dark' 
             });
 
-            // editor.getHTML()
-            // editor.getMarkdown()
-
+            function darkMode(){
+                const ui = document.querySelector('#editor').firstChild,
+                body = document.querySelector('body');
+                if (ui.classList.contains('toastui-editor-dark')){
+                    ui.classList.remove('toastui-editor-dark')
+                    body.style.setProperty('background-color','white')
+                    body.style.setProperty('color','black')
+                }else{
+                    ui.classList.add('toastui-editor-dark')
+                    body.style.setProperty('background-color','#333')
+                    body.style.setProperty('color','white')
+                }
+            }
             render();
 
             function render() {
