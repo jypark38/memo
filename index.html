@@ -50,33 +50,18 @@
                 <input type="text" name="" id="title" />
 
                 <input type="text" name="" id="id" placeholder="id" />
-                <input type="password" name="" id="pw" placeholder="pw" />
                 
                 <div id="editor"></div>
-                <!-- <textarea name="" id="content" cols="30" rows="10"></textarea> -->
 
-                <button type='submit' onclick="saveNote()">메모</button>
-                <button onclick="reset()">초기화</button>
+                <button type='button' class='memo-btn' onclick="saveNote()">메모</button>
+                <button type='button' onclick="reset()">초기화</button>
+                <button type="button" onclick="removeAll()" >일괄 삭제</button>
+                <button type="button" class='recent' onclick="sortMemo()">최신순으로 정렬</button>
             </section>
-            <section id="display"></section>
+            <section id="display">
+            </section>
         </main>
         <script>
-            function UserInfo(){
-                let userId = document.querySelector('#id').value;
-                let userPassword = document.querySelector('#pw').value;
-                
-                function UserInfoGenerator(){ }
-                
-                UserInfoGenerator.prototype.getID = function (){
-                    return `${userId}`
-                }
-                UserInfoGenerator.prototype.getPW = function (){
-                    return `${userPassword}`
-                }
-                
-                return UserInfoGenerator
-            }
-
             let allMemo = JSON.parse(localStorage.getItem("allMemo"));
             allMemo = allMemo ?? [];
 
@@ -105,60 +90,139 @@
                 // }
 
                 for (const item of allMemo) {
+
+                    const wrap = document.createElement('div')
+                    wrap.classList.add('memo-content-wrap')
+
                     const saveTitle = document.createElement("h2");
                     const saveContent = document.createElement("div");
-                    const saveId = document.createElement("p");
+                    const saveId = document.createElement("h3");
                     const saveTime = document.createElement('time')
                     const deleteMemoBtn = document.createElement("button");
+                    const editMemoBtn = document.createElement("button");
 
                     saveTitle.textContent = item.title;
+                    saveTitle.classList.add('memo-title')
                     saveContent.innerHTML = item.content;
-                    saveId.textContent = item.len + 1;
+                    saveContent.classList.add('memo-content')
+                    saveId.textContent = item.id;
+                    saveId.classList.add('memo-id')
 
                     saveTime.textContent = item.Time
                     saveTime.setAttribute('datetime',item.Time)
+                    saveTime.classList.add('memo-time')
+
 
                     deleteMemoBtn.textContent = "삭제";
                     deleteMemoBtn.setAttribute("id", item.len);
                     deleteMemoBtn.setAttribute("onclick", "remove()");
 
-                    display.appendChild(saveId);
-                    display.appendChild(saveTitle);
-                    display.appendChild(saveContent);
-                    display.appendChild(saveTime);
-                    display.appendChild(deleteMemoBtn);
+                    editMemoBtn.textContent = "수정";
+                    editMemoBtn.setAttribute("id", item.len);
+                    editMemoBtn.setAttribute("onclick", "edit()");
+
+                    wrap.appendChild(saveTitle);
+                    wrap.appendChild(saveId);
+                    wrap.appendChild(saveTime);
+                    wrap.appendChild(saveContent);
+                    wrap.appendChild(deleteMemoBtn);
+                    wrap.appendChild(editMemoBtn);
+
+                    display.appendChild(wrap)
                 }
             }
 
-
-            function saveNote() {
+            // 작성
+            function saveNote(idx=null) {
                 const title = document.getElementById("title").value;
                 // const content = document.getElementById("content").value;
+                const id = document.querySelector("#id").value
                 const content = editor.getHTML();
 
                 function addZero(e){
                     return `${(e)<10?`0${e}`:`${e}`}`
                 }
-                const date = new Date();
-                year = `${date.getFullYear()}`
-                month = addZero(date.getMonth()+1)
-                day = addZero(date.getDate())
-                hour = addZero(date.getHours())
-                minutes = addZero(date.getMinutes())
+                if(event.target.innerText !== '수정')
+                    if(title && id && editor.preview.el.innerText ){
+                        const date = new Date();
+                        year = `${date.getFullYear()}`
+                        month = addZero(date.getMonth()+1)
+                        day = addZero(date.getDate())
+                        hour = addZero(date.getHours())
+                        minutes = addZero(date.getMinutes())
+                        seconds = addZero(date.getSeconds())
 
-                Time = `${year}-${month}-${day} ${hour}:${minutes}`
-                allMemo.push({ title, content, len: allMemo.length, Time});
+                        Time = `${year}-${month}-${day} ${hour}:${minutes}:${seconds}`
 
-                localStorage.setItem("allMemo", JSON.stringify(allMemo));
+                        if(document.querySelector('.former')){
+                            allMemo.unshift({ title, content, id, len: allMemo.length, Time})
+                        }
+                        if(document.querySelector('.recent'))
+                            allMemo.push({ title, content, id, len: allMemo.length, Time});
+                        
+                        localStorage.setItem("allMemo", JSON.stringify(allMemo));
 
-                render();
+                        render();
 
-                reset()
+                        reset()
+                    } else{
+                        alert('입력하지 않은 값이 있습니다')
+                        document.querySelector('#title').focus()
+                }else{
+                    let idx = find_edit(document.querySelectorAll('.memo-content-wrap'));
+                    const memo_btn =document.querySelector('.memo-btn')
+
+                    allMemo[idx].title = title
+                    allMemo[idx].id = id
+                    allMemo[idx].content = content
+
+                    memo_btn.classList.remove('memo-editing')
+                    memo_btn.innerText='메모'
+                    render();
+
+                    reset()
+                }
             }
 
+            //수정
+            function find_edit(wraps){
+                for(let i=0; i<wraps.length ;i++){
+                    if(wraps[i].classList.contains('editing')){
+                        idx = i
+                        break
+                    }
+                }
+                return idx
+            }
+            function edit(){
+                const memo_btn = document.querySelector('.memo-btn'),
+                wrap = event.target.parentNode,
+                title = wrap.querySelector('.memo-title'),
+                content = wrap.querySelector('.memo-content'),
+                inpTitle = document.querySelector('#title'),
+                inpId = document.querySelector('#id');
+
+                inpTitle.value = title.innerHTML
+                inpId.value = wrap.querySelector('.memo-id').innerHTML
+                editor.setHTML(content.innerHTML)
+
+                if (memo_btn.innerText !== '수정'){
+                    memo_btn.classList.add('memo-editing')
+                    memo_btn.innerText = '수정'
+                }
+                else{
+                    const wraps = document.querySelectorAll('.memo-content-wrap')
+                    let idx =find_edit(wraps);
+                    
+                    wraps[idx].classList.remove('editing')
+                    wraps[idx].style = 'border : none'
+                }
+                wrap.classList.add('editing')
+                wrap.style = 'border : 5px solid black'
+            }
+
+            // 삭제
             function remove() {
-                // console.log(event.srcElement.id);
-                // console.log(allMemo);
                 const idx = allMemo.find(
                     (item) => item.len == event.srcElement.id
                 );
@@ -172,11 +236,34 @@
                 render();
             }
 
+            // 일괄 삭제
+            function removeAll(){
+                allMemo = []
+                localStorage.setItem("allMemo", JSON.stringify(allMemo));
+                render()
+            }
+
+            // 초기화
             function reset(){
                 document.querySelector('#title').value=''
+                document.querySelector("#id").value=''
                 document.querySelectorAll('.ProseMirror').forEach(e=>{
                     e.innerHTML = ''
                 })
+            }
+
+            // 정렬
+            function sortMemo(){
+                    if(event.target.className==='former'){
+                        event.target.className='recent'
+                        event.target.innerHTML='최신순으로 정렬'
+                    }else{
+                        event.target.className='former'
+                        event.target.innerHTML='오래된 순으로 정렬'
+                    }
+
+                    allMemo.reverse()
+                    render()
             }
         </script>
     </body>
