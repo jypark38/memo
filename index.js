@@ -16,7 +16,6 @@ function darkMode(){
     btn = document.querySelector('.btn-dark'),
     memo_wrap = document.querySelectorAll('.memo-content-wrap'),
     editing = find_edit(memo_wrap)
-    console.log(editing)
 
     if (ui_class.contains('toastui-editor-dark')){
         ui_class.remove('toastui-editor-dark')
@@ -41,7 +40,6 @@ function darkMode(){
         document.querySelectorAll('.btn').forEach(e => {
             e.style.setProperty('background','#3b5fad')
         })
-        console.log(editing)
         if(editing!==undefined){
             memo_wrap[editing].style.setProperty('box-shadow', '0 0 0 8px #3b5fad')
         }
@@ -146,7 +144,7 @@ function saveNote() {
     function addZero(e){
         return `${(e)<10?`0${e}`:`${e}`}`
     }
-    if(title && id && editor.preview.el.innerText ){
+    if(title && id){
         if(event.target.innerText !== '수정'){
 
             const date = new Date();
@@ -210,7 +208,6 @@ function edit(){
     content = wrap.querySelector('.memo-content'),
     inpTitle = document.querySelector('#title'),
     inpId = document.querySelector('#id');
-    console.log(title)
     inpTitle.value = title.innerHTML
     inpId.value = wrap.querySelector('.memo-id').innerHTML
     editor.setHTML(content.innerHTML)
@@ -243,26 +240,35 @@ function edit(){
 function remove() {
     const idx = allMemo.find(
         (item) => item.len == event.srcElement.id
-    );
-
-    if(confirm(`제목 : ${idx.title} 을 삭제하시겠습니까?`)){
-        if (idx) {
-            allMemo.splice(
-                allMemo.findIndex((item) => item.len == idx.len),
-                1
-            );
+    ),
+    memo_wrap = document.querySelectorAll('.memo-content-wrap');
+    if(find_edit(memo_wrap)===undefined){
+        if(confirm(`제목 : ${idx.title} 을 삭제하시겠습니까?`)){
+            if (idx) {
+                allMemo.splice(
+                    allMemo.findIndex((item) => item.len == idx.len),
+                    1
+                );
+            }
+            localStorage.setItem("allMemo", JSON.stringify(allMemo));
+            render();
         }
-        localStorage.setItem("allMemo", JSON.stringify(allMemo));
-        render();
+    }else{
+        alert('수정중인 메모가 있습니다')
     }
 }
 
 // 일괄 삭제
 function removeAll(){
-    if(confirm('작성된 메모를 모두 삭제하시겠습니까?')){
-        allMemo = []
-        localStorage.setItem("allMemo", JSON.stringify(allMemo));
-        render()
+    const memo_wrap = document.querySelectorAll('.memo-content-wrap');
+    if(find_edit(memo_wrap)===undefined){
+        if(confirm('작성된 메모를 모두 삭제하시겠습니까?')){
+            allMemo = []
+            localStorage.setItem("allMemo", JSON.stringify(allMemo));
+            render()
+        }
+    }else{
+        alert('수정중인 메모가 있습니다')
     }
 }
 
@@ -277,14 +283,19 @@ function reset(){
 
 // 정렬
 function sortMemo(){
-    if(event.target.className==='former'){
-        event.target.className='recent'
-        event.target.innerHTML='최신순으로 정렬'
-    }else{
-        event.target.className='former'
-        event.target.innerHTML='오래된 순으로 정렬'
-    }
+    const memo_wrap = document.querySelectorAll('.memo-content-wrap');
+    if(find_edit(memo_wrap)===undefined){
+        if(event.target.className==='former'){
+            event.target.className='recent'
+            event.target.innerHTML='최신순으로 정렬'
+        }else{
+            event.target.className='former'
+            event.target.innerHTML='오래된 순으로 정렬'
+        }
 
-    allMemo.reverse()
-    render()
+        allMemo.reverse()
+        render()
+    }else{
+        alert('수정중인 메모가 있습니다')
+    }
 }
