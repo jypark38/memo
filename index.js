@@ -18,13 +18,14 @@ function darkMode(){
     editing = find_edit(memo_wrap)
 
     if (ui_class.contains('toastui-editor-dark')){
+        btn.innerText='🌙'
+
         ui_class.remove('toastui-editor-dark')
         body.style.setProperty('background-color','white')
         body.style.setProperty('color','black')
         document.querySelectorAll('.memo-content-wrap')
             .forEach(e => e.style.setProperty('background-color','white'))
             
-        btn.innerText='🌙'
 
         document.querySelector('.view').style.setProperty('background-color','#d4d8e8')
 
@@ -44,12 +45,13 @@ function darkMode(){
             memo_wrap[editing].style.setProperty('box-shadow', '0 0 0 8px #3b5fad')
         }
     }else{
+        btn.innerText='☀️'
+
         ui_class.add('toastui-editor-dark')
         body.style.setProperty('background-color','#333')
         body.style.setProperty('color','white')
         document.querySelectorAll('.memo-content-wrap')
             .forEach(e => e.style.setProperty('background-color','#222'))
-        btn.innerText='☀️'
         
         document.querySelector('.view').style.setProperty('background-color','#333')
 
@@ -129,9 +131,16 @@ function render() {
         wrap.appendChild(memo_header);
         wrap.appendChild(saveContent);
         wrap.appendChild(memo_btns);
+        
 
         display.appendChild(wrap)
     }
+    const ui_class = document.querySelector('#editor').firstChild.classList
+        if (ui_class.contains('toastui-editor-dark')){
+
+            document.querySelectorAll('.memo-content-wrap')
+            .forEach(e => e.style.setProperty('background-color','#222'))
+        }
 }
 
 // 작성
@@ -152,17 +161,13 @@ function saveNote() {
         if (btn[i].classList.contains('active')){
             if (i===0){
                 text=editor.preview.el.innerText
-                console.log(text)
             }else{
                 text=document.querySelectorAll('.ProseMirror')[1].innerText
-                console.log(editor.getHTML())
-            
             }
         }
     }
 
     if(title && id && text){
-        console.log(text)
         if(event.target.innerText !== '수정'){
 
             const date = new Date();

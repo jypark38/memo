@@ -1,5 +1,7 @@
 # memo
 
+page : https://jypark38.github.io/memo/
+
 ### 기능 구현 예정
 1. 일괄 삭제
 2. 수정 
