@@ -122,8 +122,8 @@ function render() {
         memo_header.appendChild(saveId)
         memo_header.appendChild(saveTime)
 
-        memo_btns.appendChild(deleteMemoBtn)
         memo_btns.appendChild(editMemoBtn)
+        memo_btns.appendChild(deleteMemoBtn)
         
         wrap.appendChild(saveTitle)
         wrap.appendChild(memo_header);
@@ -135,16 +135,34 @@ function render() {
 }
 
 // 작성
+function addZero(e){
+    return `${(e)<10?`0${e}`:`${e}`}`
+}
+
 function saveNote() {
     const title = document.getElementById("title").value;
     // const content = document.getElementById("content").value;
     const id = document.querySelector("#id").value
     const content = editor.getHTML();
+    const btn = document.querySelector('.toastui-editor-mode-switch').children
+    let text;
 
-    function addZero(e){
-        return `${(e)<10?`0${e}`:`${e}`}`
+    // 에디터 식별
+    for(let i=0;i<2;i++){
+        if (btn[i].classList.contains('active')){
+            if (i===0){
+                text=editor.preview.el.innerText
+                console.log(text)
+            }else{
+                text=document.querySelectorAll('.ProseMirror')[1].innerText
+                console.log(editor.getHTML())
+            
+            }
+        }
     }
-    if(title && id){
+
+    if(title && id && text){
+        console.log(text)
         if(event.target.innerText !== '수정'){
 
             const date = new Date();
@@ -285,11 +303,11 @@ function reset(){
 function sortMemo(){
     const memo_wrap = document.querySelectorAll('.memo-content-wrap');
     if(find_edit(memo_wrap)===undefined){
-        if(event.target.className==='former'){
-            event.target.className='recent'
+        if(event.target.classList.contains('former')){
+            event.target.className='recent btn'
             event.target.innerHTML='최신순으로 정렬'
         }else{
-            event.target.className='former'
+            event.target.className='former btn'
             event.target.innerHTML='오래된 순으로 정렬'
         }
 
