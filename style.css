@@ -1,0 +1,163 @@
+:root{
+    --placeholder-color : #222
+}
+
+main {
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 70vw;
+}
+
+input {
+    display: block;
+    width: 300px;
+
+    margin-bottom: 10px;
+    border :2px solid #ddd;
+
+    padding-left: 10px;
+}
+input::placeholder{
+    color:var(--placeholder-color);
+
+}
+
+#title{
+    height: 50px;
+    font-size: 25px;
+}
+
+#id {
+    height: 30px;
+    font-size: 20px;
+}
+.section-editor{
+    width: 100%;
+}
+
+.input-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-dark{
+    align-self: center;
+    width: 70px;
+    height: 70px;
+    font-size: 40px;
+    border-radius: 50%;
+
+    border: none;
+
+    opacity: 0.6;
+}
+.btn-dark:hover{
+    opacity: 1;
+}
+
+.memo-btn-wrap {
+    display: flex;
+    justify-content: end;
+    gap: 20px;
+}
+
+.btn {
+    margin-top: 20px;
+    display: block;
+    width: 200px;
+    padding: 10px;
+    border-radius: 30px;
+    font-size: 20px;
+
+    background-color: #3b5fad;
+    color: white;
+    border: none;
+}
+.btn:hover{
+    opacity: 0.8;
+}
+.btn:active{
+    opacity: 1;
+}
+
+.view {
+    border: 3px solid black;
+    width: 100%;
+    margin-top: 30px;
+
+    padding: 10px;
+
+    background-color: #d4d8e8;
+}
+.view-btn-wrap{
+    margin: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+.view-btn-wrap>button{
+    margin-top: 0;
+
+}
+
+.memo-content-wrap{
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 20px;
+    padding: 30px;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+}
+
+.memo-content-wrap:last-child{
+    margin-bottom: 30px;
+}
+
+.memo-header {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.memo-header > time{
+    align-self: center;
+    padding: 10px;
+}
+
+.memo-content{
+    border: 2px solid gray;
+    margin-bottom: 20px;
+}
+.memo-id{
+    flex-grow: 1;
+}
+
+.memo-btns{
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+}
+.memo-btns>button{
+    font-size: 16px;
+}
+
+.memo-content{
+    padding: 10px;
+}
+
+.content-btn{
+    color: black;
+    font-weight: 600;
+}
+
+.content-btn:hover{
+    opacity: 0.8;
+}
+.content-btn:active{
+    opacity: 1;
+}
