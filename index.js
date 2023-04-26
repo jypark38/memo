@@ -32,7 +32,7 @@ function darkMode(){
 
         document.querySelectorAll('.header-input').forEach((e)=>{
             e.style.setProperty('background',"#fff")
-            e.style.setProperty('border','2px solid #ddd')
+            e.style.setProperty('border','1px solid #ddd')
             e.style.setProperty('color','black')
         })
         document.documentElement.style.setProperty('--placeholder-color', '#222');
@@ -57,7 +57,7 @@ function darkMode(){
         
         document.querySelectorAll('.header-input').forEach((e)=>{
             e.style.setProperty('background',"#333")
-            e.style.setProperty('border','2px solid white')
+            e.style.setProperty('border','1px solid #eee')
             e.style.setProperty('color','white')
         })
         document.documentElement.style.setProperty('--placeholder-color', '#eee');
