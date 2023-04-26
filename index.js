@@ -81,9 +81,9 @@ function render() {
 
     for (const item of allMemo) {
 
-        const saveTitle = document.createElement("h2"),
+        const saveTitle = document.createElement("h3"),
                 saveContent = document.createElement("div"),
-                saveId = document.createElement("h3"),
+                saveId = document.createElement("h4"),
                 saveTime = document.createElement('time'),
                 deleteMemoBtn = document.createElement("button"),
                 editMemoBtn = document.createElement("button"),

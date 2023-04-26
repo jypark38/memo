@@ -15,15 +15,18 @@
         />
         <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
         <link rel="stylesheet" href="./style.css">
+        <title>메모장</title>
     </head>
     <body>
         <main>
+            <h1>메모장</h1>
             <section class="section-editor">
+                <h2 class="a11y-hidden">편집기</h2>
                 <div class="input-header">
                     <div class="main-input-wrap">
-                        <input type="text" name="" class='header-input' id="title" placeholder="제목" />
+                        <input type="text" name="title" class='header-input' id="title" placeholder="제목" />
     
-                        <input type="text" name="" class='header-input' id="id" placeholder="id" />
+                        <input type="text" name="id" class='header-input' id="id" placeholder="id" />
                     </div>
                     <button type="button" class='btn-dark' onclick="darkMode()">🌙</button>
     
@@ -33,7 +36,7 @@
 
                 <div class="memo-btn-wrap">
                     <button type='button' class='memo-btn btn' onclick="saveNote()">메모</button>
-                    <button type='button' class='btn'onclick="reset()">초기화</button>
+                    <button type='button' class='btn' onclick="reset()">초기화</button>
                 </div>
             </section>
             <div class="view">
@@ -42,6 +45,7 @@
                     <button type="button" class='recent btn' onclick="sortMemo()">최신순으로 정렬</button>
                 </div>
                 <section id="display">
+                    <h2 class="a11y-hidden">글 목록</h2>
                 </section>
             </div>
         </main>
